@@ -91,13 +91,34 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint32_t timeout_tick;
+  // uint32_t timeout_tick;
   while (1)
   {
+	  /*
 	  if (timeout_tick < HAL_GetTick()) {
 		  timeout_tick = HAL_GetTick() + 500;
 		  GPIOA->ODR ^= 0X01 << 5;
 	  }
+	  */
+	  /*
+	   if (GPIOC->IDR == 0x00 << 13) {
+		  GPIOA->ODR = 0x01 << 5;
+	  } else {
+		  GPIOA->ODR = 0x00 << 5;
+	  }*/
+
+	  /*if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == 0){
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
+	  } else {
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
+	  }*/
+
+	  if (HAL_GPIO_ReadPin(PB1_GPIO_Port, PB1_Pin) == 0) {
+		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 1);
+	  } else {
+		  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, 0);
+	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -161,10 +182,17 @@ static void MX_GPIO_Init(void)
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : User_Btn_Pin */
+  GPIO_InitStruct.Pin = PB1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(PB1_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD2_Pin */
   GPIO_InitStruct.Pin = LD2_Pin;
